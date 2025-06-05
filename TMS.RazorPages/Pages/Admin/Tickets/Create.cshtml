@@ -1,0 +1,59 @@
+﻿@page
+@model TMS.RazorPages.Pages.Admin.Tickets.CreateModel
+@{
+    ViewData["Title"] = "Dodaj zgłoszenie";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Szczegóły zgłoszenia</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Ticket.Title" class="control-label">Tytuł</label>
+                        <input asp-for="Ticket.Title" class="form-control" />
+                        <span asp-validation-for="Ticket.Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Ticket.Description" class="control-label">Opis</label>
+                        <textarea asp-for="Ticket.Description" class="form-control" rows="5"></textarea>
+                        <span asp-validation-for="Ticket.Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Ticket.ProjectId" class="control-label">Projekt</label>
+                        <select asp-for="Ticket.ProjectId" asp-items="Model.Projects" class="form-control">
+                            <option value="">-- Wybierz projekt --</option>
+                        </select>
+                        <span asp-validation-for="Ticket.ProjectId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Ticket.Status" class="control-label">Status</label>
+                        <select asp-for="Ticket.Status" asp-items="Model.Statuses" class="form-control"></select>
+                        <span asp-validation-for="Ticket.Status" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Ticket.AssignedToId" class="control-label">Przypisz do</label>
+                        <select asp-for="Ticket.AssignedToId" asp-items="Model.Users" class="form-control">
+                            <option value="">-- Nie przypisane --</option>
+                        </select>
+                        <span asp-validation-for="Ticket.AssignedToId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mt-4">
+                        <input type="submit" value="Dodaj" class="btn btn-primary" />
+                        <a asp-page="Index" class="btn btn-secondary">Powrót do listy</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

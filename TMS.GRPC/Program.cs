@@ -2,7 +2,6 @@ using TMS.Application;
 using TMS.GRPC.Services;
 using TMS.Infrastructure;
 using TMS.Infrastructure.Persistence;
-using Grpc.AspNetCore.Server.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 

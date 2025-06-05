@@ -1,0 +1,105 @@
+﻿@page
+@model TMS.RazorPages.Pages.Admin.Tickets.IndexModel
+@{
+    ViewData["Title"] = "Zarządzanie zgłoszeniami";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Dodaj nowe zgłoszenie</a>
+</p>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Filtry</h5>
+    </div>
+    <div class="card-body">
+        <form method="get">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="ProjectId">Projekt</label>
+                        <select asp-for="ProjectId" asp-items="Model.ProjectList" class="form-control">
+                            <option value="">Wszystkie projekty</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="Status">Status</label>
+                        <select asp-for="Status" asp-items="Model.StatusList" class="form-control">
+                            <option value="">Wszystkie statusy</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="AssignedToId">Przypisane do</label>
+                        <select asp-for="AssignedToId" asp-items="Model.UserList" class="form-control">
+                            <option value="">Wszyscy użytkownicy</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn btn-primary form-control">Filtruj</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tytuł</th>
+            <th>Projekt</th>
+            <th>Status</th>
+            <th>Utworzone przez</th>
+            <th>Przypisane do</th>
+            <th>Data utworzenia</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ticket in Model.Tickets)
+        {
+            <tr>
+                <td>@ticket.Id</td>
+                <td>@ticket.Title</td>
+                <td>@ticket.Project?.Name</td>
+                <td>
+                    <span class="badge @GetStatusBadgeClass(ticket.Status)">@ticket.Status</span>
+                </td>
+                <td>@ticket.CreatedBy?.Username</td>
+                <td>@(ticket.AssignedTo?.Username ?? "-")</td>
+                <td>@ticket.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>
+                    <div class="btn-group">
+                        <a asp-page="./Edit" asp-route-id="@ticket.Id" class="btn btn-sm btn-info">Edytuj</a>
+                        <a asp-page="./Details" asp-route-id="@ticket.Id" class="btn btn-sm btn-primary">Szczegóły</a>
+                        <a asp-page="./Delete" asp-route-id="@ticket.Id" class="btn btn-sm btn-danger">Usuń</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@functions {
+    public string GetStatusBadgeClass(TicketStatus status)
+    {
+        return status switch
+        {
+            TicketStatus.New => "bg-primary",
+            TicketStatus.InProgress => "bg-warning",
+            TicketStatus.Completed => "bg-success",
+            TicketStatus.Closed => "bg-secondary",
+            _ => "bg-info"
+        };
+    }
+}

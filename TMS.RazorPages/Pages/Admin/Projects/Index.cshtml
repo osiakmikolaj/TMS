@@ -1,0 +1,39 @@
+﻿@page
+@model TMS.RazorPages.Pages.Admin.Projects.IndexModel
+@{
+    ViewData["Title"] = "Zarządzanie projektami";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Dodaj nowy projekt</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nazwa</th>
+            <th>Opis</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var project in Model.Projects)
+        {
+            <tr>
+                <td>@project.Id</td>
+                <td>@project.Name</td>
+                <td>@project.Description</td>
+                <td>
+                    <div class="btn-group">
+                        <a asp-page="./Edit" asp-route-id="@project.Id" class="btn btn-sm btn-info">Edytuj</a>
+                        <a asp-page="./Details" asp-route-id="@project.Id" class="btn btn-sm btn-primary">Szczegóły</a>
+                        <a asp-page="./Delete" asp-route-id="@project.Id" class="btn btn-sm btn-danger">Usuń</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

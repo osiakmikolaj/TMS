@@ -1,0 +1,77 @@
+﻿@page
+@model TMS.RazorPages.Pages.Admin.IndexModel
+@{
+    ViewData["Title"] = "Panel administratora";
+}
+
+<div class="jumbotron">
+    <h1 class="display-4">Panel administratora TMS</h1>
+    <p class="lead">System zarządzania zgłoszeniami (Ticketing Management System)</p>
+    <hr class="my-4">
+    <p>Wybierz jedną z dostępnych opcji zarządzania.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Zarządzanie projektami</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Dodawanie, edycja i usuwanie projektów w systemie.</p>
+                <a asp-page="/Admin/Projects/Index" class="btn btn-outline-primary">Przejdź</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">Zarządzanie użytkownikami</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Dodawanie, edycja i usuwanie użytkowników w systemie.</p>
+                <a asp-page="/Admin/Users/Index" class="btn btn-outline-success">Przejdź</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">Zarządzanie zgłoszeniami</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Dodawanie, edycja i usuwanie zgłoszeń w systemie.</p>
+                <a asp-page="/Admin/Tickets/Index" class="btn btn-outline-info">Przejdź</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="card-title mb-0">Statystyki systemu</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="alert alert-primary">
+                            Liczba projektów: @Model.ProjectCount
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="alert alert-success">
+                            Liczba użytkowników: @Model.UserCount
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="alert alert-info">
+                            Liczba zgłoszeń: @Model.TicketCount
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

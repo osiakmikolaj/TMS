@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using TMS.Application.Common.Behaviors;
 
+
 namespace TMS.Application;
 
 public static class DependencyInjection

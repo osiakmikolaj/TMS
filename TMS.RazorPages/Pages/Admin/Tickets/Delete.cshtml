@@ -1,0 +1,48 @@
+﻿@page
+@model TMS.RazorPages.Pages.Admin.Tickets.DeleteModel
+@{
+    ViewData["Title"] = "Usuń zgłoszenie";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="alert alert-danger">
+    <h4>Czy na pewno chcesz usunąć to zgłoszenie?</h4>
+    <p>Tej operacji nie można cofnąć.</p>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Szczegóły zgłoszenia</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">ID</dt>
+            <dd class="col-sm-9">@Model.Ticket.Id</dd>
+
+            <dt class="col-sm-3">Tytuł</dt>
+            <dd class="col-sm-9">@Model.Ticket.Title</dd>
+
+            <dt class="col-sm-3">Opis</dt>
+            <dd class="col-sm-9">@Model.Ticket.Description</dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">@Model.Ticket.Status</dd>
+
+            <dt class="col-sm-3">Projekt</dt>
+            <dd class="col-sm-9">@Model.Ticket.Project?.Name</dd>
+
+            <dt class="col-sm-3">Utworzone przez</dt>
+            <dd class="col-sm-9">@Model.Ticket.CreatedBy?.Username</dd>
+
+            <dt class="col-sm-3">Data utworzenia</dt>
+            <dd class="col-sm-9">@Model.Ticket.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
+        </dl>
+    </div>
+</div>
+
+<form method="post">
+    <input type="hidden" asp-for="Ticket.Id" />
+    <button type="submit" class="btn btn-danger">Usuń</button>
+    <a asp-page="./Index" class="btn btn-secondary">Anuluj</a>
+</form>

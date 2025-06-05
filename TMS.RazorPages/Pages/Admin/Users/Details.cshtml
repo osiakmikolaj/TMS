@@ -1,0 +1,119 @@
+﻿@page
+@model TMS.RazorPages.Pages.Admin.Users.DetailsModel
+@{
+    ViewData["Title"] = "Szczegóły użytkownika";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <h4>Użytkownik - @Model.User.Username</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9">@Model.User.Id</dd>
+
+                <dt class="col-sm-3">Nazwa użytkownika</dt>
+                <dd class="col-sm-9">@Model.User.Username</dd>
+
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">@Model.User.Email</dd>
+
+                <dt class="col-sm-3">Imię</dt>
+                <dd class="col-sm-9">@Model.User.FirstName</dd>
+
+                <dt class="col-sm-3">Nazwisko</dt>
+                <dd class="col-sm-9">@Model.User.LastName</dd>
+
+                <dt class="col-sm-3">Rola</dt>
+                <dd class="col-sm-9"><span class="badge bg-primary">@Model.User.Role</span></dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Akcje</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a asp-page="./Edit" asp-route-id="@Model.User.Id" class="btn btn-primary">Edytuj użytkownika</a>
+                        <a asp-page="./Delete" asp-route-id="@Model.User.Id" class="btn btn-danger">Usuń użytkownika</a>
+                        <a asp-page="./Index" class="btn btn-secondary">Powrót do listy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4 class="mt-4">Zgłoszenia przypisane do użytkownika</h4>
+
+@if (Model.AssignedTickets.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tytuł</th>
+                <th>Projekt</th>
+                <th>Status</th>
+                <th>Data utworzenia</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in Model.AssignedTickets)
+            {
+                <tr>
+                    <td>@ticket.Id</td>
+                    <td><a asp-page="/Admin/Tickets/Details" asp-route-id="@ticket.Id">@ticket.Title</a></td>
+                    <td>@ticket.Project?.Name</td>
+                    <td>@ticket.Status</td>
+                    <td>@ticket.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        Brak zgłoszeń przypisanych do tego użytkownika.
+    </div>
+}
+
+<h4 class="mt-4">Zgłoszenia utworzone przez użytkownika</h4>
+
+@if (Model.CreatedTickets.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tytuł</th>
+                <th>Projekt</th>
+                <th>Status</th>
+                <th>Data utworzenia</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in Model.CreatedTickets)
+            {
+                <tr>
+                    <td>@ticket.Id</td>
+                    <td><a asp-page="/Admin/Tickets/Details" asp-route-id="@ticket.Id">@ticket.Title</a></td>
+                    <td>@ticket.Project?.Name</td>
+                    <td>@ticket.Status</td>
+                    <td>@ticket.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        Brak zgłoszeń utworzonych przez tego użytkownika.
+    </div>
+}

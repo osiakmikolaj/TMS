@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TMS.Application.Common.Interfaces;
 using TMS.Infrastructure.Persistence;
@@ -20,8 +21,8 @@ public static class DependencyInjection
 
         services.AddTransient<IDateTime, DateTimeService>();
 
-        services.AddAuthentication();
-        services.AddAuthorization();
+        services.AddAuthenticationCore();
+        services.AddAuthorizationCore();
 
         return services;
     }
