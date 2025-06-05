@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+option csharp_namespace = "TMS.GRPC";
+
+package tickets;
+
+service TicketService {
+  rpc GetTickets (GetTicketsRequest) returns (GetTicketsResponse);
+  rpc GetTicket (GetTicketRequest) returns (TicketResponse);
+  rpc CreateTicket (CreateTicketRequest) returns (TicketResponse);
+  rpc UpdateTicket (UpdateTicketRequest) returns (TicketResponse);
+  rpc DeleteTicket (DeleteTicketRequest) returns (DeleteTicketResponse);
+}
+
+message GetTicketsRequest {
+  optional int32 projectId = 1;
+}
+
+message GetTicketsResponse {
+  repeated TicketResponse tickets = 1;
+}
+
+message GetTicketRequest {
+  int32 id = 1;
+}
+
+message CreateTicketRequest {
+  string title = 1;
+  string description = 2;
+  int32 projectId = 3;
+  int32 createdById = 4;
+  optional int32 assignedToId = 5;
+}
+
+message UpdateTicketRequest {
+  int32 id = 1;
+  optional string title = 2;
+  optional string description = 3;
+  optional int32 status = 4;
+  optional int32 assignedToId = 5;
+}
+
+message DeleteTicketRequest {
+  int32 id = 1;
+}
+
+message DeleteTicketResponse {
+  bool success = 1;
+}
+
+message TicketResponse {
+  int32 id = 1;
+  string title = 2;
+  string description = 3;
+  int32 status = 4;
+  int32 createdById = 5;
+  string createdByName = 6;
+  optional int32 assignedToId = 7;
+  optional string assignedToName = 8;
+  int32 projectId = 9;
+  string projectName = 10;
+  string createdAt = 11;
+  optional string updatedAt = 12;
+}
