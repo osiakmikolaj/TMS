@@ -21,9 +21,6 @@ public static class DependencyInjection
 
         services.AddTransient<IDateTime, DateTimeService>();
 
-        services.AddAuthenticationCore();
-        services.AddAuthorizationCore();
-
         return services;
     }
 }

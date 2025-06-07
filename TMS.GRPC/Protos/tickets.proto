@@ -38,7 +38,6 @@ message UpdateTicketRequest {
   optional string description = 3;
   optional int32 status = 4;
   optional int32 assigned_to_id = 5;
-  optional bool clear_assigned_to_id = 6; // Dodane pole
 }
 
 message DeleteTicketRequest {

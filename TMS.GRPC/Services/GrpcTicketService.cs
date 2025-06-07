@@ -8,16 +8,10 @@ using TMS.GRPC;
 namespace TMS.GRPC.Services
 {
     // Dziedziczenie z TMS.GRPC.TicketService.TicketServiceBase jest kluczowe
-    public class GrpcTicketService : TMS.GRPC.TicketService.TicketServiceBase
+    public class GrpcTicketService(IApplicationDbContext context, ILogger<GrpcTicketService> logger) : TMS.GRPC.TicketService.TicketServiceBase()
     {
-        private readonly IApplicationDbContext _context;
-        private readonly ILogger<GrpcTicketService> _logger;
-
-        public GrpcTicketService(IApplicationDbContext context, ILogger<GrpcTicketService> logger)
-        {
-            _context = context;
-            _logger = logger;
-        }
+        private readonly IApplicationDbContext _context = context;
+        private readonly ILogger<GrpcTicketService> _logger = logger;
 
         public override async Task<GetTicketsResponse> GetTickets(GetTicketsRequest request, ServerCallContext serverCallContext)
         {
@@ -109,20 +103,6 @@ namespace TMS.GRPC.Services
             if (request.HasStatus)
                 ticket.Status = (TicketStatus)request.Status;
 
-            // Poprawiona obsługa pola ClearAssignedToId
-            // Sprawdź czy pole jest obecne w żądaniu
-            if (request.HasClearAssignedToId)
-            {
-                // Pola opcjonalnego bool nie możemy sprawdzić bezpośrednio przez 
-                // `request.ClearAssignedToId` bo to jest metoda, nie właściwość.
-                // Po prostu ustawiamy AssignedToId na null, gdy pole jest obecne.
-                ticket.AssignedToId = null;
-            }
-            else if (request.HasAssignedToId)
-            {
-                ticket.AssignedToId = request.AssignedToId;
-            }
-
             ticket.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync(serverCallContext.CancellationToken);
@@ -134,7 +114,7 @@ namespace TMS.GRPC.Services
         public override async Task<DeleteTicketResponse> DeleteTicket(DeleteTicketRequest request, ServerCallContext serverCallContext)
         {
             _logger.LogInformation("GRPC DeleteTicket request received for ID: {TicketId}", request.Id);
-            var ticket = await _context.Tickets.FindAsync(new object[] { request.Id }, serverCallContext.CancellationToken);
+            var ticket = await _context.Tickets.FindAsync([request.Id], serverCallContext.CancellationToken);
 
             if (ticket == null)
             {

@@ -25,6 +25,7 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7017;http://localhost:5160",
+      "TicketServiceUrl": "https://localhost:7120",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

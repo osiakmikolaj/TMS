@@ -12,7 +12,7 @@ namespace TMS.RazorPages.Services
             var grpcServiceUrl = configuration["GrpcSettings:TicketServiceUrl"];
             if (string.IsNullOrEmpty(grpcServiceUrl))
             {
-                throw new ArgumentNullException(nameof(grpcServiceUrl), "GrpcSettings:TicketServiceUrl is not configured.");
+                throw new InvalidOperationException("GrpcSettings:TicketServiceUrl is not configured.");
             }
             var channel = GrpcChannel.ForAddress(grpcServiceUrl);
             _client = new TicketService.TicketServiceClient(channel);

@@ -7,16 +7,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Protobuf Include="Protos\tickets.proto" GrpcServices="Server" />
-		<Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
+		<Protobuf Include="Protos/*.proto" GrpcServices="Server" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<!-- Użyj stabilnych wersji pakietów gRPC dla .NET 8, np. 2.62.0 lub 2.63.0, jeśli 2.71.0 powoduje problemy -->
-		<PackageReference Include="Grpc.AspNetCore" Version="2.62.0" />
-		<PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.62.0" />
-		<!-- Upewnij się, że wersja EF Core jest spójna z resztą projektu, np. 8.0.16 -->
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.16" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
+		<PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.71.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
