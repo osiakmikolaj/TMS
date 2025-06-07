@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Moq;
 using TMS.API.Controllers;
 using TMS.Domain.Entities;
 using TMS.Infrastructure.Persistence;
@@ -10,6 +12,7 @@ namespace TMS.API.Tests.Controllers
     public class TicketControllerTests
     {
         private readonly DbContextOptions<ApplicationDbContext> _dbContextOptions;
+        private readonly Mock<ILogger<TicketController>> _mockLogger;
 
         public TicketControllerTests()
         {
@@ -17,6 +20,9 @@ namespace TMS.API.Tests.Controllers
             _dbContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: $"TestDb_{Guid.NewGuid()}")
                 .Options;
+
+            // Utwórz mocka dla ILogger
+            _mockLogger = new Mock<ILogger<TicketController>>();
         }
 
         private async Task SeedDatabaseAsync(ApplicationDbContext context)
@@ -86,7 +92,7 @@ namespace TMS.API.Tests.Controllers
             // Arrange
             using var context = new ApplicationDbContext(_dbContextOptions);
             await SeedDatabaseAsync(context);
-            var controller = new TicketController(context);
+            var controller = new TicketController(context, _mockLogger.Object);
 
             // Act
             var result = await controller.GetTickets();
@@ -103,7 +109,7 @@ namespace TMS.API.Tests.Controllers
             // Arrange
             using var context = new ApplicationDbContext(_dbContextOptions);
             await SeedDatabaseAsync(context);
-            var controller = new TicketController(context);
+            var controller = new TicketController(context, _mockLogger.Object);
             var ticket = await context.Tickets.FirstAsync();
 
             // Act
@@ -122,7 +128,7 @@ namespace TMS.API.Tests.Controllers
             // Arrange
             using var context = new ApplicationDbContext(_dbContextOptions);
             await SeedDatabaseAsync(context);
-            var controller = new TicketController(context);
+            var controller = new TicketController(context, _mockLogger.Object);
             var nonExistentId = 9999;
 
             // Act
@@ -138,7 +144,7 @@ namespace TMS.API.Tests.Controllers
             // Arrange
             using var context = new ApplicationDbContext(_dbContextOptions);
             await SeedDatabaseAsync(context);
-            var controller = new TicketController(context);
+            var controller = new TicketController(context, _mockLogger.Object);
             var project = await context.Projects.FirstAsync();
             var user = await context.Users.FirstAsync();
 
@@ -174,7 +180,7 @@ namespace TMS.API.Tests.Controllers
             // Arrange
             using var context = new ApplicationDbContext(_dbContextOptions);
             await SeedDatabaseAsync(context);
-            var controller = new TicketController(context);
+            var controller = new TicketController(context, _mockLogger.Object);
             var ticket = await context.Tickets.FirstAsync();
 
             // Modyfikacja zgłoszenia
@@ -201,7 +207,7 @@ namespace TMS.API.Tests.Controllers
             // Arrange
             using var context = new ApplicationDbContext(_dbContextOptions);
             await SeedDatabaseAsync(context);
-            var controller = new TicketController(context);
+            var controller = new TicketController(context, _mockLogger.Object);
             var ticket = await context.Tickets.FirstAsync();
 
             // Act

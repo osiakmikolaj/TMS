@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TMS.Infrastructure.Persistence;
+using TMS.Application.Common.Interfaces;
 using TMS.Domain.Entities;
 
 namespace TMS.API.Controllers
@@ -10,30 +10,34 @@ namespace TMS.API.Controllers
     [Route("api/[controller]")]
     public class TicketController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
+        private readonly ILogger<TicketController> _logger;
 
-        public TicketController(ApplicationDbContext context)
+        public TicketController(IApplicationDbContext context, ILogger<TicketController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
+        // GET: api/Ticket
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ticket>>> GetTickets()
         {
             return await _context.Tickets
-                .Include(t => t.Project)
                 .Include(t => t.CreatedBy)
                 .Include(t => t.AssignedTo)
+                .Include(t => t.Project)
                 .ToListAsync();
         }
 
+        // GET: api/Ticket/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Ticket>> GetTicket(int id)
         {
             var ticket = await _context.Tickets
-                .Include(t => t.Project)
                 .Include(t => t.CreatedBy)
                 .Include(t => t.AssignedTo)
+                .Include(t => t.Project)
                 .FirstOrDefaultAsync(t => t.Id == id);
 
             if (ticket == null)
@@ -44,37 +48,44 @@ namespace TMS.API.Controllers
             return ticket;
         }
 
+        // POST: api/Ticket
         [HttpPost]
-        [Authorize]
         public async Task<ActionResult<Ticket>> CreateTicket(Ticket ticket)
         {
-            ticket.CreatedAt = DateTime.Now;
-
-            // Pobierz ID użytkownika z tokenu JWT
-            // W rzeczywistej implementacji użylibyśmy Claims z tokenu
-            // ticket.CreatedById = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
+            ticket.CreatedAt = DateTime.UtcNow;
             _context.Tickets.Add(ticket);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(CancellationToken.None);
 
             return CreatedAtAction(nameof(GetTicket), new { id = ticket.Id }, ticket);
         }
 
+        // PUT: api/Ticket/5
         [HttpPut("{id}")]
-        [Authorize]
-        public async Task<IActionResult> UpdateTicket(int id, Ticket ticket)
+        public async Task<IActionResult> UpdateTicket(int id, Ticket ticketUpdate)
         {
-            if (id != ticket.Id)
+            if (id != ticketUpdate.Id)
             {
                 return BadRequest();
             }
 
-            ticket.UpdatedAt = DateTime.Now;
-            _context.Entry(ticket).State = EntityState.Modified;
+            // Najpierw pobierz istniejący bilet
+            var ticket = await _context.Tickets.FindAsync(id);
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            // Aktualizuj właściwości pojedynczo
+            ticket.Title = ticketUpdate.Title;
+            ticket.Description = ticketUpdate.Description;
+            ticket.Status = ticketUpdate.Status;
+            ticket.AssignedToId = ticketUpdate.AssignedToId;
+            ticket.ProjectId = ticketUpdate.ProjectId;
+            ticket.UpdatedAt = DateTime.UtcNow;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(CancellationToken.None);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -91,8 +102,8 @@ namespace TMS.API.Controllers
             return NoContent();
         }
 
+        // DELETE: api/Ticket/5
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteTicket(int id)
         {
             var ticket = await _context.Tickets.FindAsync(id);
@@ -102,7 +113,7 @@ namespace TMS.API.Controllers
             }
 
             _context.Tickets.Remove(ticket);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(CancellationToken.None);
 
             return NoContent();
         }

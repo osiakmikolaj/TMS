@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using TMS.Domain.Entities; // Dodaj ten using, jeœli u¿ywasz enum TicketStatus
 using TMS.RazorPages.Services;
 
 namespace TMS.RazorPages.Pages.Admin.GrpcClient
@@ -27,7 +28,7 @@ namespace TMS.RazorPages.Pages.Admin.GrpcClient
                     Id = ticket.Id,
                     Title = ticket.Title,
                     Description = ticket.Description,
-                    Status = ticket.Status,
+                    Status = ((TicketStatus)ticket.Status).ToString(),
                     ProjectId = ticket.ProjectId,
                     ProjectName = ticket.ProjectName
                 });

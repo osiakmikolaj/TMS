@@ -9,7 +9,12 @@ namespace TMS.RazorPages.Services
 
         public GrpcTicketClient(IConfiguration configuration)
         {
-            var channel = GrpcChannel.ForAddress(configuration["GrpcSettings:TicketServiceUrl"]);
+            var grpcServiceUrl = configuration["GrpcSettings:TicketServiceUrl"];
+            if (string.IsNullOrEmpty(grpcServiceUrl))
+            {
+                throw new ArgumentNullException(nameof(grpcServiceUrl), "GrpcSettings:TicketServiceUrl is not configured.");
+            }
+            var channel = GrpcChannel.ForAddress(grpcServiceUrl);
             _client = new TicketService.TicketServiceClient(channel);
         }
 
@@ -18,17 +23,17 @@ namespace TMS.RazorPages.Services
             return await _client.GetTicketsAsync(new GetTicketsRequest());
         }
 
-        public async Task<GetTicketResponse> GetTicketAsync(int id)
+        public async Task<TicketResponse> GetTicketAsync(int id)
         {
             return await _client.GetTicketAsync(new GetTicketRequest { Id = id });
         }
 
-        public async Task<CreateTicketResponse> CreateTicketAsync(CreateTicketRequest request)
+        public async Task<TicketResponse> CreateTicketAsync(CreateTicketRequest request)
         {
             return await _client.CreateTicketAsync(request);
         }
 
-        public async Task<UpdateTicketResponse> UpdateTicketAsync(UpdateTicketRequest request)
+        public async Task<TicketResponse> UpdateTicketAsync(UpdateTicketRequest request)
         {
             return await _client.UpdateTicketAsync(request);
         }

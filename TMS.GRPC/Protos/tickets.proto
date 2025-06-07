@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option csharp_namespace = "TMS.GRPC";
 
-package tickets;
+package ticket;
 
 service TicketService {
   rpc GetTickets (GetTicketsRequest) returns (GetTicketsResponse);
@@ -13,7 +13,7 @@ service TicketService {
 }
 
 message GetTicketsRequest {
-  optional int32 projectId = 1;
+  optional int32 project_id = 1;
 }
 
 message GetTicketsResponse {
@@ -27,9 +27,9 @@ message GetTicketRequest {
 message CreateTicketRequest {
   string title = 1;
   string description = 2;
-  int32 projectId = 3;
-  int32 createdById = 4;
-  optional int32 assignedToId = 5;
+  int32 created_by_id = 3;
+  optional int32 assigned_to_id = 4;
+  int32 project_id = 5;
 }
 
 message UpdateTicketRequest {
@@ -37,7 +37,8 @@ message UpdateTicketRequest {
   optional string title = 2;
   optional string description = 3;
   optional int32 status = 4;
-  optional int32 assignedToId = 5;
+  optional int32 assigned_to_id = 5;
+  optional bool clear_assigned_to_id = 6; // Dodane pole
 }
 
 message DeleteTicketRequest {
@@ -53,12 +54,12 @@ message TicketResponse {
   string title = 2;
   string description = 3;
   int32 status = 4;
-  int32 createdById = 5;
-  string createdByName = 6;
-  optional int32 assignedToId = 7;
-  optional string assignedToName = 8;
-  int32 projectId = 9;
-  string projectName = 10;
-  string createdAt = 11;
-  optional string updatedAt = 12;
+  int32 created_by_id = 5;
+  string created_by_name = 6;
+  optional int32 assigned_to_id = 7;
+  optional string assigned_to_name = 8;
+  int32 project_id = 9;
+  string project_name = 10;
+  string created_at = 11;
+  optional string updated_at = 12;
 }
