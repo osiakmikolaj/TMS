@@ -55,7 +55,6 @@ namespace TMS.RazorPages.Pages.Admin.Tickets
                 return Page();
             }
 
-            // Ustaw datê aktualizacji
             Ticket.UpdatedAt = DateTime.Now;
 
             _context.Attach(Ticket).State = EntityState.Modified;

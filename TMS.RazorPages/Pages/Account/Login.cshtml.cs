@@ -47,8 +47,6 @@ namespace TMS.RazorPages.Pages.Account
 
             if (ModelState.IsValid)
             {
-                // W rzeczywistym scenariuszu sprawdzilibyśmy hasło
-                // Dla uproszczenia, sprawdzamy tylko nazwę użytkownika
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == Input.Username);
 
                 if (user != null)

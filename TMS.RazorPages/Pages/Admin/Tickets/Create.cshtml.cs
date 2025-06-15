@@ -40,7 +40,6 @@ namespace TMS.RazorPages.Pages.Admin.Tickets
                 return Page();
             }
 
-            // Pobierz aktualnego u¿ytkownika z kontekstu
             var username = User.Identity.Name;
             var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
 
